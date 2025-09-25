@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -19,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 public class controller {
 
     private ProductService service;
@@ -29,8 +32,8 @@ public class controller {
 
 
     @RequestMapping("/")
-    public String welcome(){
-        String toReturn = "This Page is Welcome Page";
+    public String welcome(HttpServletRequest reqqHttpServletRequest){
+        String toReturn = "This Page is Welcome Page on Sesion : "+ reqqHttpServletRequest.getSession().getId();
         return toReturn;
     }
 
@@ -56,7 +59,7 @@ public class controller {
         Product saved = service.saveProduct(product);
 
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
 
