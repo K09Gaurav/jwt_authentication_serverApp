@@ -1,13 +1,19 @@
 package com.spring.jwt_auth_prog;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.jersey.JerseyProperties.Servlet;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -43,6 +49,14 @@ public class controller {
             return new ResponseEntity<>(product, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/product")
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        Product saved = service.saveProduct(product);
+
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
