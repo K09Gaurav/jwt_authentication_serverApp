@@ -33,7 +33,7 @@ public class SecurityConfig {
          *
          * remove login page and now ANYONE can access it
          */
-        http.csrf(customizer -> customizer.disable());
+        // http.csrf(customizer -> customizer.disable());
 
         /*
          * Require authentication for any request by default.
@@ -41,20 +41,20 @@ public class SecurityConfig {
          * Access to localhost was denied
          * Denies any request
          */
-        http.authorizeHttpRequests(requst -> requst.anyRequest().authenticated());
+        // http.authorizeHttpRequests(requst -> requst.anyRequest().authenticated());
 
         /*
          * implements form login
          * buit when accesiing from postman
          * the response is in the form of html form lol
          */
-        http.formLogin(Customizer.withDefaults());
+        // http.formLogin(Customizer.withDefaults());
 
         /*
          * Enable HTTP Basic authentication.
          * Useful for api clients like postman
          */
-        http.httpBasic(Customizer.withDefaults());
+        // http.httpBasic(Customizer.withDefaults());
 
         /*
          * now we cant login from browser cuz everry time i need to login again
@@ -70,12 +70,16 @@ public class SecurityConfig {
          * but if we remove the login form page it wil now ask us for authentication using http basic
          * and treat us using http basic
          */
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        return http
+                    .csrf(Customizer -> Customizer.disable())
+                    .authorizeHttpRequests(Customizer -> Customizer.anyRequest().authenticated())
+                    // .formLogin(Customizer.withDefaults())
+                    .httpBasic(Customizer.withDefaults())
+                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    .build();
 
-
-
-        return http.build();
     }
 
 }
