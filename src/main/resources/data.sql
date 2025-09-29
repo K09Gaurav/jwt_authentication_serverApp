@@ -8,3 +8,7 @@ INSERT INTO Product (name, price, release_date) VALUES ('Monitor 4K Curved', 450
 INSERT INTO Product (name, price, release_date) VALUES ('Keyboard Mechanical', 99.99, '2022-12-05');
 INSERT INTO Product (name, price, release_date) VALUES ('Portable Speaker', 59.90, '2024-06-18');
 INSERT INTO Product (name, price, release_date) VALUES ('Tablet Mini', 320.00, '2023-04-01');
+
+INSERT INTO Users (username, password, roles) VALUES
+    ('alice', 'password123','USER'),
+    ('bob', 'hunter2','ADMIN');

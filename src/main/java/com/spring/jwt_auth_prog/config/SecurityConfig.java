@@ -8,14 +8,10 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.spring.jwt_auth_prog.service.MyUserDetailsService;
 
 /*
  * We are saying hey spring security
@@ -140,7 +136,11 @@ public class SecurityConfig {
      */
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private MyUserDetailsService userDetailsService;
+
+    public SecurityConfig(MyUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
@@ -148,6 +148,21 @@ public class SecurityConfig {
         provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance()); // we can just say no password encoder
         provider.setUserDetailsService(userDetailsService);
         return provider;
+    }
+
+
+
+
+    @Bean // custom filterchain for enabling h2 console
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        return http
+                .authorizeHttpRequests(req -> req
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .anyRequest().authenticated())
+                .csrf(csrf -> csrf.disable())
+                .headers(header -> header.frameOptions(fo -> fo.disable()))
+                .formLogin(Customizer.withDefaults())
+                .build();
     }
 
 }
