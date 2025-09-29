@@ -6,6 +6,10 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 /*
@@ -73,13 +77,42 @@ public class SecurityConfig {
         // http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http
-                    .csrf(Customizer -> Customizer.disable())
-                    .authorizeHttpRequests(Customizer -> Customizer.anyRequest().authenticated())
-                    // .formLogin(Customizer.withDefaults())
-                    .httpBasic(Customizer.withDefaults())
-                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .build();
+                .csrf(Customizer -> Customizer.disable())
+                .authorizeHttpRequests(Customizer -> Customizer.anyRequest().authenticated())
+                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
+                // .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .build();
 
+    }
+
+    /*
+     * I want to verify the way i want and not use default login form
+     * Create a bean -> it will be picked up by spring security
+     *
+     * UserDetailsService is used by DaoAuthenticationProvider
+     * for retrieving a username, a password, and other attributes for authenticating with a username and password.
+     * Spring Security provides in-memory, JDBC, and caching implementations of UserDetailsService.
+     *
+     * You can define custom authentication by exposing a custom UserDetailsService as a bean.
+     */
+    @Bean
+    public UserDetailsService userDetailsService(){
+        UserDetails user1 = User
+                .withDefaultPasswordEncoder()
+                .username("Gaurav")
+                .password("Kumar")
+                .roles("ADMIN")
+                .build();
+
+        UserDetails user2 = User
+                .withDefaultPasswordEncoder()
+                .username("wow")
+                .password("bro")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user1,user2);    // InMemoryUserDetailsManager is a class that implements UserDetailsService
     }
 
 }
