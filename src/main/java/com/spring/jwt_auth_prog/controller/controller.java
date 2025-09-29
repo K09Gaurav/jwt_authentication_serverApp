@@ -1,4 +1,4 @@
-package com.spring.jwt_auth_prog;
+package com.spring.jwt_auth_prog.controller;
 
 import java.util.List;
 
@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.spring.jwt_auth_prog.model.Product;
+import com.spring.jwt_auth_prog.service.ProductService;
 
 import jakarta.servlet.http.HttpServletRequest;
 

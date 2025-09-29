@@ -1,8 +1,11 @@
-package com.spring.jwt_auth_prog;
+package com.spring.jwt_auth_prog.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.spring.jwt_auth_prog.model.Product;
+import com.spring.jwt_auth_prog.repo.ProductRepo;
 
 @Service
 public class ProductService {
