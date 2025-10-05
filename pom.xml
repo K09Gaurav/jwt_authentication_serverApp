@@ -95,6 +95,16 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- the use of the Jackson library to serialize and deserialize JSON data,
+		which is fundamental to the structure and processing of JWTs. JWTs are encoded as JSON objects,
+		and Jackson provides the tools to convert these JSON strings into Java objects  -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.13.0</version>
+			<scope>runtime</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

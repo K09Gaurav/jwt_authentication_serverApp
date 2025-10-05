@@ -2,9 +2,11 @@ package com.spring.jwt_auth_prog.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -153,19 +155,24 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder());
+        provider.setPasswordEncoder(new BCryptPasswordEncoder()); // unhashing it s
         return provider;
     }
 
     /*
-     * will use bcrypt to do hashing
-     * b crypt = plain password -> hash1 -> hash2 -> ...... -> hashN -> store in DB
-     * eg in online websites - give password give number of rounds
-     * if rounds given is 10 -> it will run for 2^10 rounds
+     * In the background
+     * Authentication provider is only authentication
+     * but the real work is done by
+     * Authentication manager which handles these requests of authentication
      *
-     * Implement bcrypt when a user register and also when validating it
-     *
+     * To implement JWT we need to use this
      */
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration ) throws Exception{
+        return configuration.getAuthenticationManager();
+
+    }
 
 
 

@@ -15,6 +15,16 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 public class UserController {
 
+    /*
+     * will use bcrypt to do hashing
+     * b crypt = plain password -> hash1 -> hash2 -> ...... -> hashN -> store in DB
+     * eg in online websites - give password give number of rounds
+     * if rounds given is 10 -> it will run for 2^10 rounds
+     *
+     * Implement bcrypt when a user register and also when validating it
+     *
+     */
+
     private UsersService service;
     private BCryptPasswordEncoder encoder;
 
