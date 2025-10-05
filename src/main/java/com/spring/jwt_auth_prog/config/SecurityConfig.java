@@ -1,6 +1,5 @@
 package com.spring.jwt_auth_prog.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,9 +7,10 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.core.userdetails.UserDetailsService;
 import com.spring.jwt_auth_prog.service.MyUserDetailsService;
 
 /*
@@ -135,7 +135,16 @@ public class SecurityConfig {
      * For Databases there is DAO Authentication provider (which indirectly implements AuthenticationProvider)
      */
 
-    @Autowired
+    /*
+     * UserDetailsService is just an interface
+     * UserDetailsService is used by DaoAuthenticationProvider for retrieving a username, a password,
+     * and other attributes for authenticating with a username and password.
+     * Spring Security provides in-memory, JDBC, and caching implementations of UserDetailsService.
+     *
+     * DaoAuthenticationProvider doesn’t fetch users itself — it delegates that job to UserDetailsService.
+     *
+     * User Details Service only has access to the username in order to retrieve the full user entity
+     */
     private MyUserDetailsService userDetailsService;
 
     public SecurityConfig(MyUserDetailsService userDetailsService) {
@@ -144,9 +153,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance()); // we can just say no password encoder
-        provider.setUserDetailsService(userDetailsService);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         return provider;
     }
 
@@ -163,6 +171,7 @@ public class SecurityConfig {
                 .headers(header -> header.frameOptions(fo -> fo.disable()))
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
+
                 .build();
     }
 
