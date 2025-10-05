@@ -177,17 +177,17 @@ public class SecurityConfig {
 
 
 
-    @Bean // custom filterchain for enabling h2 console
+    @Bean // custom filterchain for enabling h2 console, login, register
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(req -> req
-                    .requestMatchers("/h2-console/**").permitAll()
-                    .anyRequest().authenticated())
-                .headers(header -> header.frameOptions(fo -> fo.disable()))
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
-
-                .build();
+                .requestMatchers("/h2-console/**","/register","/login").permitAll()
+                .anyRequest().authenticated())
+                    .csrf(csrf -> csrf.disable())
+                    .headers(header -> header.frameOptions(fo -> fo.disable()))
+                    .httpBasic(Customizer.withDefaults())
+                    .formLogin(Customizer.withDefaults())
+                    .build();
     }
 
 }
