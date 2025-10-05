@@ -186,7 +186,7 @@ public class SecurityConfig {
                     .csrf(csrf -> csrf.disable())
                     .headers(header -> header.frameOptions(fo -> fo.disable()))
                     .httpBasic(Customizer.withDefaults())
-                    .formLogin(Customizer.withDefaults())
+                    // .formLogin(Customizer.withDefaults())`
                     .build();
     }
 

@@ -41,6 +41,14 @@ public class UserController {
         return service.registUser(user);
     }
 
+    @PostMapping("/login")
+    public String login(@RequestBody Users user){
+        return service.verify(user);
+    }
+
+
+
+
     /*
      * CSRF token proves “this request actually came from my own site, not from somewhere else.
      */
