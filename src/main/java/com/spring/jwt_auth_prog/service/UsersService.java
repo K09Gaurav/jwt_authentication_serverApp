@@ -15,12 +15,13 @@ import com.spring.jwt_auth_prog.repo.UserRepo;
 public class UsersService {
     private UserRepo repo;
     private AuthenticationManager authenticationManager;
+    private JWTService jwt;
 
 
-
-    public UsersService(UserRepo repo, AuthenticationManager authenticationManager) {
+    public UsersService(UserRepo repo, AuthenticationManager authenticationManager, JWTService jwt) {
         this.repo = repo;
         this.authenticationManager = authenticationManager;
+        this.jwt = jwt;
     }
 
     public Users registUser(Users user){
@@ -51,7 +52,12 @@ public class UsersService {
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            return authentication.isAuthenticated() ? "Success" :"meh";
+            if (authentication.isAuthenticated()){
+                return jwt.generateToken(user.getUsername());
+            }
+            else
+            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT); //lol just because i cans
+
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT); //lol just because i cans
         }
