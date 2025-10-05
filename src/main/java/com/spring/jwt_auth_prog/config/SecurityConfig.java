@@ -8,7 +8,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.spring.jwt_auth_prog.service.MyUserDetailsService;
@@ -177,7 +176,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                     .requestMatchers("/h2-console/**").permitAll()
                     .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
                 .headers(header -> header.frameOptions(fo -> fo.disable()))
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
