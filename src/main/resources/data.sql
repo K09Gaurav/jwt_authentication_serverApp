@@ -11,4 +11,4 @@ INSERT INTO Product (name, price, release_date) VALUES ('Tablet Mini', 320.00, '
 
 INSERT INTO Users (username, password, roles) VALUES
     ('alice', 'password123','USER'),
-    ('bob', 'hunter2','ADMIN');
+    ('bob', '$2a$10$kvvNh8wBF2jqb6.K8ObJN.PKGmljIR1o6YwvQEkSMvaSSFi.qJM2G','ADMIN');

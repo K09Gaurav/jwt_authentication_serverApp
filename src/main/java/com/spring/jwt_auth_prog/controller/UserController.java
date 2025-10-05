@@ -1,5 +1,6 @@
 package com.spring.jwt_auth_prog.controller;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,14 +16,18 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserController {
 
     private UsersService service;
-
+    private BCryptPasswordEncoder encoder;
 
     public UserController(UsersService service) {
         this.service = service;
+        this.encoder = new BCryptPasswordEncoder();
     }
+
+
 
     @PostMapping("/register")
     public Users registUser(@RequestBody Users user){
+        user.setPassword(encoder.encode(user.getPassword()));
         return service.registUser(user);
     }
 
