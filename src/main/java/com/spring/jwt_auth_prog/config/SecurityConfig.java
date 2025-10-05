@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.spring.jwt_auth_prog.service.MyUserDetailsService;
 
@@ -147,9 +148,11 @@ public class SecurityConfig {
      * User Details Service only has access to the username in order to retrieve the full user entity
      */
     private MyUserDetailsService userDetailsService;
+    private JwtFilter jwtFilter;
 
-    public SecurityConfig(MyUserDetailsService userDetailsService) {
+    public SecurityConfig(MyUserDetailsService userDetailsService, JwtFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -175,6 +178,11 @@ public class SecurityConfig {
     }
 
 
+    /*
+     * to authenticate JWT token we first need to make sure
+     * that Userpassword authentication is happening after JWT authenticatiron filter
+     */
+
 
 
     @Bean // custom filterchain for enabling h2 console, login, register
@@ -187,6 +195,7 @@ public class SecurityConfig {
                     .headers(header -> header.frameOptions(fo -> fo.disable()))
                     .httpBasic(Customizer.withDefaults())
                     // .formLogin(Customizer.withDefaults())`
+                    .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
     }
 
