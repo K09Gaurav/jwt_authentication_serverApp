@@ -1,5 +1,7 @@
 package com.spring.jwt_auth_prog.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.spring.jwt_auth_prog.service.MyUserDetailsService;
 
@@ -190,14 +193,25 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**")) // allows csrf protection with JWT
+
                 .authorizeHttpRequests(req -> req
-                .requestMatchers("/h2-console/**","/register","/login").permitAll()
-                .anyRequest().authenticated())
-                    .headers(header -> header.frameOptions(fo -> fo.disable())) // remove in production only for h2
-                    .httpBasic(Customizer.withDefaults())
-                    .formLogin(Customizer.withDefaults())
-                    .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                    .build();
+                    .requestMatchers("/h2-console/**","/register","/login").permitAll()
+                    .anyRequest().authenticated())
+                .cors(cors -> cors.configurationSource(req ->{
+                    var config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:8080/"));
+                    config.setAllowedMethods(List.of("GET","POST","PUT","DELETE"));
+                    config.setAllowedHeaders(List.of("Authorization","Content-Type"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
+                .headers(header -> header.frameOptions(fo -> fo.disable())) // remove in production only for h2
+                .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
+                .oauth2Login(Customizer.withDefaults())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
+
 
 }
