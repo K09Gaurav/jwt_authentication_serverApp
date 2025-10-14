@@ -10,5 +10,5 @@ INSERT INTO Product (name, price, release_date) VALUES ('Portable Speaker', 59.9
 INSERT INTO Product (name, price, release_date) VALUES ('Tablet Mini', 320.00, '2023-04-01');
 
 INSERT INTO Users (username, password, roles) VALUES
-    ('alice', 'password123','USER'),
     ('bob', '$2a$10$kvvNh8wBF2jqb6.K8ObJN.PKGmljIR1o6YwvQEkSMvaSSFi.qJM2G','ADMIN');
+    -- hunter2 is the password here data is stored in encoded form

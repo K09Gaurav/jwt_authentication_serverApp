@@ -48,7 +48,7 @@ public class JWTService {
             .add(claims)
             .subject(username)
             .issuedAt(new Date(System.currentTimeMillis()))
-            .expiration(new Date(System.currentTimeMillis() + (60 *60*60 *10)))
+            .expiration(new Date(System.currentTimeMillis() + (100 *60*60*10))) //1hr
             .and()
             .signWith(getKey())
             .compact();
@@ -67,7 +67,7 @@ public class JWTService {
          * fetch claims
          * fetch username then return it
          */
-        return extractClaims(token, Claims::getSubject);
+        return extractClaims(token, Claims::getSubject);// get subject is the name of function (methd referencing)
     }
     private <T> T extractClaims(String token, Function<Claims,T> claimmResolver){
         final Claims claims = extractAllClaims(token);

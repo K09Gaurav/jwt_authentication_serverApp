@@ -117,7 +117,8 @@ public class SecurityConfig {
     //             .password("bro")
     //             .roles("USER")
     //             .build();
-
+            // Using inMemory because of Hardcoded values.
+            //for propper impplementation with DB use JdbcUserDetailsManager
     //     return new InMemoryUserDetailsManager(user1,user2);    // InMemoryUserDetailsManager is a class that implements UserDetailsService
     // }
 
@@ -188,13 +189,13 @@ public class SecurityConfig {
     @Bean // custom filterchain for enabling h2 console, login, register
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**")) // allows csrf protection with JWT
                 .authorizeHttpRequests(req -> req
                 .requestMatchers("/h2-console/**","/register","/login").permitAll()
                 .anyRequest().authenticated())
-                    .csrf(csrf -> csrf.disable())
-                    .headers(header -> header.frameOptions(fo -> fo.disable()))
+                    .headers(header -> header.frameOptions(fo -> fo.disable())) // remove in production only for h2
                     .httpBasic(Customizer.withDefaults())
-                    // .formLogin(Customizer.withDefaults())`
+                    .formLogin(Customizer.withDefaults())
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
     }

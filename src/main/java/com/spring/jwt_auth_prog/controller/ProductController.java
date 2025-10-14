@@ -38,13 +38,13 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products")
+    @GetMapping("/api/products")
     public ResponseEntity<List<Product>> getAllProduct(){
 
         return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/api/product/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable int id)  {
         Product product =  service.getProduct(id);
 
@@ -54,7 +54,7 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/product")
+    @PostMapping("/api/product")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         Product saved = service.saveProduct(product);
 
